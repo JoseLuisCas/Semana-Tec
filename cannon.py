@@ -9,13 +9,15 @@ Exercises
 
 """
 
-from random import randrange
-from turtle import *
+from random import randrange, randint
+from turtle import clear, dot, goto, update, ontimer,\
+    hideturtle, up, tracer, onscreenclick, done
 from freegames import vector
 
 ball = vector(-200, -200)
 speed = vector(0, 0)
 targets = []
+
 
 def tap(x, y):
     "Respond to screen tap."
@@ -25,23 +27,26 @@ def tap(x, y):
         speed.x = (x + 200) / 25
         speed.y = (y + 200) / 25
 
+
 def inside(xy):
     "Return True if xy within screen."
     return -200 < xy.x < 200 and -200 < xy.y < 200
 
+
 def draw():
     "Draw ball and targets."
+    colores = ['purple', 'blue', 'green', 'pink',
+               'brown', 'yellow', 'black', 'orange']
     clear()
-
     for target in targets:
         goto(target.x, target.y)
-        dot(20, 'blue')
+        dot(20, colores[(randint(0, 7))])
 
     if inside(ball):
         goto(ball.x, ball.y)
         dot(6, 'red')
-
     update()
+
 
 def move():
     "Move ball and targets."
@@ -63,16 +68,10 @@ def move():
     for target in dupe:
         if abs(target - ball) > 13:
             targets.append(target)
-
     draw()
+    ontimer(move, 2)
 
-    for target in targets:
-        if not inside(target):
-            return
 
-    ontimer(move, 50)
-
-setup(420, 420, 370, 0)
 hideturtle()
 up()
 tracer(False)
